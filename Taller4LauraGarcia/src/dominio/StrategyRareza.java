@@ -1,4 +1,8 @@
 package dominio;
+//Autor: Laura Garcia 
+//Rut 26427429-k
+//Paralelo C2 
+
 
 import java.util.ArrayList;
 

@@ -3,14 +3,24 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
+import java.io.File;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import dominio.*;
 import logica.*;
 
+
+//Autor: Laura Garcia 
+//Rut 26427429-k
+//Paralelo C2 
+
+
 public class Ventana extends JFrame {
 
-    private SistemaImple sistema;
-    private JTextArea areaColeccion;
+	private SistemaImple sistema;
+	private JList<Carta> listaVisual;
+	private DefaultListModel<Carta> modeloLista;
 
     public Ventana() {
 
@@ -21,11 +31,13 @@ public class Ventana extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        areaColeccion = new JTextArea(25, 70);
-        areaColeccion.setEditable(false);
-        areaColeccion.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        modeloLista = new DefaultListModel<Carta>();
 
-        JScrollPane scroll = new JScrollPane(areaColeccion);
+        listaVisual = new JList<Carta>(modeloLista);
+        listaVisual.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        listaVisual.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        JScrollPane scroll = new JScrollPane(listaVisual);
 
         JTabbedPane pestanas = new JTabbedPane();
 
@@ -297,52 +309,58 @@ public class Ventana extends JFrame {
 
             actualizarArea(listaOrdenada);
         });
-
         botonVerDetalle.addActionListener(e -> {
 
-            actualizarArea(sistema.getListaCarta());
+            Carta cartaSeleccionada = listaVisual.getSelectedValue();
 
-            int indice = pedirEntero("Ingrese el número de la carta que desea ver en detalle:");
-
-            if (indice < 0) {
+            if (cartaSeleccionada == null) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar una carta de la colección.");
                 return;
             }
 
-            ArrayList<Carta> lista = sistema.getListaCarta();
-
-            if (indice >= lista.size()) {
-                JOptionPane.showMessageDialog(this, "No existe una carta con ese número.");
-                return;
-            }
-
-            Carta carta = lista.get(indice);
-
-            Visitor1 visitor = new Visitor1();
-
-            double poder = carta.aceptarVisitor(visitor);
-
-            JOptionPane.showMessageDialog(this,
-                    "DETALLE DE CARTA\n\n"
-                    + carta.toString() + "\n"
-                    + "Poder calculado: " + poder + "\n"
-                    + "Ruta imagen: " + carta.getRutaCarta()
-            );
+            mostrarDetalleCarta(cartaSeleccionada);
         });
-
         actualizarArea(sistema.getListaCarta());
+        
+        listaVisual.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                if (e.getClickCount() == 2) {
+
+                    Carta cartaSeleccionada = listaVisual.getSelectedValue();
+
+                    if (cartaSeleccionada != null) {
+                        mostrarDetalleCarta(cartaSeleccionada);
+                    }
+                }
+            }
+        });
+        
+        
 
         setVisible(true);
     }
 
+    
+    /**
+     * Metodo que actualiza el área de texto que muestra la colección de cartas.
+     * @param lista
+     */
     private void actualizarArea(ArrayList<Carta> lista) {
 
-        areaColeccion.setText("");
+        modeloLista.clear();
 
         for (int i = 0; i < lista.size(); i++) {
-            areaColeccion.append(i + " - " + lista.get(i).toString() + "\n");
+            modeloLista.addElement(lista.get(i));
         }
     }
-
+    /**
+     * Metodo que solicita un texto al usuario mediante una ventana de entrada.
+     * @param mensaje
+     * @return
+     */
     private String pedirTexto(String mensaje) {
 
         String texto = JOptionPane.showInputDialog(this, mensaje);
@@ -358,7 +376,11 @@ public class Ventana extends JFrame {
 
         return texto.trim();
     }
-
+    /**
+     * Metodo que solicita un número entero al usuario mediante una ventana de entrada.
+     * @param mensaje
+     * @return
+     */
     private int pedirEntero(String mensaje) {
 
         String texto = JOptionPane.showInputDialog(this, mensaje);
@@ -382,5 +404,53 @@ public class Ventana extends JFrame {
         }
 
         return numero;
+    }
+    
+    /**
+     * Metodo que muestra una vista ampliada de una carta, incluyendo sus atributos,
+     * su poder calculado y su imagen correspondiente.
+     * Si la imagen no existe, utiliza la imagen por defecto.
+     *
+     * @param carta carta que se desea visualizar en detalle
+     */
+    private void mostrarDetalleCarta(Carta carta) {
+ 
+
+        Visitor1 visitor = new Visitor1();
+        double poder = carta.aceptarVisitor(visitor);
+
+        String rutaImagen = carta.getRutaCarta();
+
+        File archivoImagen = new File(rutaImagen);
+
+        if (!archivoImagen.exists()) {
+            rutaImagen = "imagenes/default.png";
+        }
+
+        ImageIcon iconoOriginal = new ImageIcon(rutaImagen);
+
+        Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(220, 300, Image.SCALE_SMOOTH);
+
+        ImageIcon iconoEscalado = new ImageIcon(imagenEscalada);
+
+        JLabel etiquetaImagen = new JLabel(iconoEscalado);
+
+        JTextArea areaDetalle = new JTextArea();
+        areaDetalle.setEditable(false);
+        areaDetalle.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        areaDetalle.setText(
+                "DETALLE DE CARTA\n\n"
+                + carta.toString() + "\n"
+                + "Poder calculado: " + poder + "\n"
+                + "Ruta imagen: " + rutaImagen
+        );
+
+        JPanel panelDetalle = new JPanel();
+        panelDetalle.setLayout(new BorderLayout());
+
+        panelDetalle.add(etiquetaImagen, BorderLayout.WEST);
+        panelDetalle.add(areaDetalle, BorderLayout.CENTER);
+
+        JOptionPane.showMessageDialog(this, panelDetalle, "Detalle de Carta", JOptionPane.PLAIN_MESSAGE);
     }
 }

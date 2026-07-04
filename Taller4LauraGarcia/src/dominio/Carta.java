@@ -51,15 +51,18 @@ public  abstract class Carta {
 
 
 	public void setRutaCarta(String rutaCarta) {
-		if (rutaCarta== null) {
-			this.rutaCarta = rutaCarta;
-			
-			
-		}
+	    if (rutaCarta != null && !rutaCarta.trim().equals("")) {
+	        this.rutaCarta = rutaCarta;
+	    }
+	
 	}
 		
-	
-	
+	/**
+	 * Metodo abstracto que permite aplicar un visitor sobre la carta para realizar una operación
+	 *
+	 * @param visitor visitante que realiza la operación sobre la carta
+	 * @return resultado numérico entregado por el visitor
+	 */
 	public abstract double aceptarVisitor(Visitor visitor);
 		
 

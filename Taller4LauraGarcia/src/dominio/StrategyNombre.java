@@ -1,6 +1,14 @@
 package dominio;
+//Autor: Laura Garcia 
+//Rut 26427429-k
+//Paralelo C2 
+
 
 import java.util.ArrayList;
+
+/**
+ * Estrategia que ordena las cartas alfabéticamente por nombre.
+ */
 
 public class StrategyNombre implements Strategy {
 

@@ -1,4 +1,8 @@
 package logica;
+//Autor: Laura Garcia 
+//Rut 26427429-k
+//Paralelo C2 
+
 
 import java.util.ArrayList;
 
@@ -10,6 +14,15 @@ import java.io.PrintWriter;
 import dominio.*;
 
 public class GestorArchivo {
+
+	
+	/**
+	 * Metodo que lee un archivo de texto y convierte cada línea válida en un objeto Carta.
+	 *
+	 * @param nombreArchivo nombre o ruta del archivo a leer
+	 * @return lista de cartas cargadas desde el archivo
+	 * @throws FileNotFoundException si el archivo no existe
+	 */
 
 	public static ArrayList<Carta> lecturaArchivo(String nombreArchivo) throws FileNotFoundException {
 		ArrayList<Carta> listaCarta = new ArrayList<Carta>();
@@ -31,6 +44,14 @@ public class GestorArchivo {
 
 		return listaCarta;
 	}
+
+	
+	/**
+	 * Metodo que convierte una carta en una línea de texto con el formato requerido por sobres.txt.
+	 *
+	 * @param carta carta que se desea convertir
+	 * @return línea de texto con los datos de la carta
+	 */
 
 	public static String convertirCartaALinea(Carta carta) {
 
@@ -55,7 +76,7 @@ public class GestorArchivo {
 			Supporter supporter = (Supporter) carta;
 
 			linea = supporter.getNombreCarta() + ";" + supporter.getRareza() + ";" + supporter.getTipo() + ";"
-					+ supporter.getEfectorPorturno();
+					+ supporter.getEfectosPorTurno();
 
 		} else if (carta instanceof Energy) {
 
@@ -77,6 +98,15 @@ public class GestorArchivo {
 
 	}
 
+	
+	/**
+	 * Metodo que guarda una lista de cartas en un archivo de texto respetando el formato original.
+	 *
+	 * @param nombreArchivo nombre o ruta del archivo donde se guardarán los datos
+	 * @param listaCarta lista de cartas a guardar
+	 * @throws FileNotFoundException si no se puede crear o escribir el archivo
+	 */
+	
 	public static void guardarArchivo(String nombreArchivo, ArrayList<Carta> listaCarta) throws FileNotFoundException {
 
 		PrintWriter escritor = new PrintWriter(nombreArchivo);

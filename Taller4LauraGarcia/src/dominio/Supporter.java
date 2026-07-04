@@ -1,40 +1,35 @@
 package dominio;
+//Autor: Laura Garcia 
+//Rut 26427429-k
+//Paralelo C2 
+
 
 public class Supporter extends Carta {
-	
-	private int efectorPorturno;
 
-	public Supporter(String nombreCarta, int rareza, String tipo, int efectorPorturno) {
-		super(nombreCarta, rareza, tipo);
-		this.efectorPorturno = efectorPorturno;
-	}
+    private int efectosPorTurno;
 
-	public int getEfectorPorturno() {
-		return efectorPorturno;
-	}
+    public Supporter(String nombreCarta, int rareza, String tipo, int efectosPorTurno) {
+        super(nombreCarta, rareza, tipo);
+        this.efectosPorTurno = efectosPorTurno;
+    }
 
-	
-	
-	public void setEfectorPorturno(int efectorPorturno) {
-		this.efectorPorturno = efectorPorturno;
-	}
+    public int getEfectosPorTurno() {
+        return efectosPorTurno;
+    }
 
-	@Override
-	public String toString() {
-		 return "Supporter | Nombre: " + getNombreCarta()
-         + " | Rareza: " + getRareza()
-         + " | Efectos por turno: " + getEfectorPorturno();
-	}
+    public void setEfectosPorTurno(int efectosPorTurno) {
+        this.efectosPorTurno = efectosPorTurno;
+    }
 
+    @Override
+    public String toString() {
+        return "Supporter | Nombre: " + getNombreCarta()
+                + " | Rareza: " + getRareza()
+                + " | Efectos por turno: " + getEfectosPorTurno();
+    }
 
-
-	@Override
-	public double aceptarVisitor(Visitor visitor) {
-		return visitor.visitarSupporter(this);
-		
-	} 
-	
-	
-	
-
+    @Override
+    public double aceptarVisitor(Visitor visitor) {
+        return visitor.visitarSupporter(this);
+    }
 }

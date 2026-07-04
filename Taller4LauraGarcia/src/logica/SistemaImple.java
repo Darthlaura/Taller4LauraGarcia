@@ -1,4 +1,8 @@
 package logica;
+//Autor: Laura Garcia 
+//Rut 26427429-k
+//Paralelo C2 
+
 
 
 import java.io.FileNotFoundException;
@@ -17,6 +21,13 @@ public class SistemaImple implements Sistema {
 		
 		
 	}
+    
+	/**
+	 * Metodo que retorna la única instancia del sistema.
+	 * Si aún no existe, la crea.
+	 *
+	 * @return instancia única de SistemaImple
+	 */
 
     public static SistemaImple getInstancia() {
     	if(instancia == null) {
@@ -27,6 +38,9 @@ public class SistemaImple implements Sistema {
     	return instancia;
     }
 
+    /**
+     * Metodo que carga las cartas desde el archivo de datos inicial.
+     */
 
 	@Override
 	public void cargarCartas() {
@@ -53,7 +67,13 @@ public class SistemaImple implements Sistema {
 	
 		
 	}
-	
+	/**
+	 * Metodo que elimina una carta de la colección usando su índice.
+	 *
+	 * @param indice posición de la carta dentro de la lista
+	 * @return true si la carta fue eliminada, false si el índice no existe
+	 */
+
 	public boolean eliminarCartaPorIndice( int indice) {
 		
 		if (indice >=0 && indice <listaCarta.size() ) {
@@ -103,7 +123,7 @@ public class SistemaImple implements Sistema {
 				Supporter supporter = (Supporter) carta; 
 				
 				int nuevoEfectosPorTurno = Integer.parseInt(dato1); 
-				supporter.setEfectorPorturno(nuevoEfectosPorTurno);
+				supporter.setEfectosPorTurno(nuevoEfectosPorTurno);
 				return true;
 				
 			}else if ( carta instanceof Energy) {
@@ -129,7 +149,10 @@ public class SistemaImple implements Sistema {
 	
 	
 	
-	
+	/**
+	 * Metodo que guarda la colección actual de cartas en el archivo sobres.txt.
+	 */
+
 	public void guardarCambios() {
 		
 		try {
@@ -144,6 +167,12 @@ public class SistemaImple implements Sistema {
 		
 	}
 	
+	/**
+	 * Metodo que ordena la colección de cartas utilizando una estrategia recibida por parámetro.
+	 *
+	 * @param estrategia estrategia de ordenamiento a utilizar
+	 * @return lista de cartas ordenada
+	 */
 	public ArrayList<Carta> ordenarCartas(Strategy estrategia) {
 
 	    ContextoStrategy contexto = new ContextoStrategy(estrategia);

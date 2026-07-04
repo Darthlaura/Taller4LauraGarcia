@@ -1,9 +1,21 @@
 package dominio;
+//Autor: Laura Garcia 
+//Rut 26427429-k
+//Paralelo C2 
+
 
 import java.util.ArrayList;
 
+
+/**
+ * Estrategia que ordena las cartas por poder calculado de mayor a menor.
+ * Utiliza Visitor1 para obtener el poder de cada carta.
+ */
+
 public class StrategyPoder implements Strategy {
 
+	
+	
 	@Override
 	public ArrayList<Carta> ordenarCarta(ArrayList<Carta> listaCarta) {
 		ArrayList<Carta> listaCopia = new ArrayList<Carta>();
